@@ -1,6 +1,6 @@
 Short description of the architecture.
 
-Libary for files indesixing implemented on Java 7. The main services are IndexService, FilesHolder, SearchService, LexemeFrameManager, 
+Library for files indexing implemented on Java 7. The main services are IndexService, FilesHolder, SearchService, LexemeFrameManager, 
 SpecFrameManager. The index is organized into two complementary approaches: inverted index on lexems and binary trees for special symbols,
 which are excluded from analyzed text before lexems analysis. The Guice framework is used for DI.
 
