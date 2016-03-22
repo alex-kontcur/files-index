@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="120 seconds">
+    <jmxConfigurator/>
+
+    <!--  ===================================== Properties ========================================================= -->
+
+    <property name="LOG_DIR" value="${user.dir}/logs"/>
+    <property name="LOG_ROLLOVER_DIR" value="${user.dir}/logs.old"/>
+
+    <property name="PATTERN_FORMAT" value="%-20(%d{HH:mm:ss.SSS} [%-10.10thread]) %5level %-18.18logger{0} # %3L - %msg%n"/>
+
+    <property name="MAX_HISTORY" value="60"/>
+    <property name="ROLLOVER_DATE_PATTERN" value="%d{yyyy-MM-dd}"/>
+
+    <property name="CONSOLE_LEVEL" value="INFO"/>
+    <property name="GLOBAL_LOG_LEVEL" value="INFO"/>
+
+    <!--  ===================================== Common Appenders =================================================== -->
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LEVEL}</level>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${PATTERN_FORMAT}</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="Error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <level>ERROR</level>
+        <file>${LOG_DIR}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLOVER_DIR}/error.${ROLLOVER_DATE_PATTERN}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder immediateFlush="false">
+            <Pattern>${PATTERN_FORMAT}</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="Runtime" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/runtime.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLOVER_DIR}/runtime.${ROLLOVER_DATE_PATTERN}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder immediateFlush="false">
+            <Pattern>${PATTERN_FORMAT}</Pattern>
+        </encoder>
+    </appender>
+
+    <!--  ===================================== Loggers ======================================================= -->
+
+    <logger name="ru.bona.fileindex.index.IndexService" level="${GLOBAL_LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Runtime"/>
+        <appender-ref ref="Error"/>
+    </logger>
+
+    <logger name="ru.bona.fileindex.indexbuilder" level="${GLOBAL_LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Runtime"/>
+        <appender-ref ref="Error"/>
+    </logger>
+
+    <logger name="ru.bona.fileindex.model" level="${GLOBAL_LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Runtime"/>
+        <appender-ref ref="Error"/>
+    </logger>
+
+    <logger name="ru.bona.fileindex.fs" level="${GLOBAL_LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Runtime"/>
+        <appender-ref ref="Error"/>
+    </logger>
+
+    <root level="${GLOBAL_LOG_LEVEL}">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Error"/>
+    </root>
+
+</configuration>
